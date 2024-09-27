@@ -115,7 +115,7 @@ class SideKickClaimer(Claimer):
         else:
             return wait_time_minutes
 
-    def get_balance(self, claimed=False):
+    def get_balance(self, claimed=False, retries=5):
         prefix = "After" if claimed else "Before"
         default_priority = 2 if claimed else 1
 
@@ -124,20 +124,25 @@ class SideKickClaimer(Claimer):
         balance_text = f'{prefix} BALANCE:' if claimed else f'{prefix} BALANCE:'
         balance_xpath = f"//div[contains(text(), 'DIAMONDS')]/../span"
 
-        try:
-            balance_element = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.XPATH, balance_xpath))
-            )
+        for try_th in range(retries):
+            try:
+                balance_element = WebDriverWait(self.driver, 10).until(
+                    EC.visibility_of_element_located((By.XPATH, balance_xpath))
+                )
 
-            if balance_element:
-                balance_value = balance_element.text
+                if balance_element:
+                    balance_value = balance_element.text
+                    if balance_value != '0':
+                        self.output(f"Step {self.step} - {balance_text} {balance_value}", priority)
+                        break
+                    else:
+                        self.output(f"Step {self.step} - Try to get {balance_text} {try_th+1}th", priority)
+                        time.sleep(5)
 
-                self.output(f"Step {self.step} - {balance_text} {balance_value}", priority)
-
-        except NoSuchElementException:
-            self.output(f"Step {self.step} - Element containing '{prefix} Balance:' was not found.", priority)
-        except Exception as e:
-            self.output(f"Step {self.step} - An error occurred: {str(e)}", priority)
+            except NoSuchElementException:
+                self.output(f"Step {self.step} - Element containing '{prefix} Balance:' was not found.", priority)
+            except Exception as e:
+                self.output(f"Step {self.step} - An error occurred: {str(e)}", priority)
 
         self.increase_step()
 

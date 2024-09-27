@@ -108,7 +108,7 @@ class SideKickClaimer(Claimer):
 
         # self.get_balance(False)
 
-        wait_time_minutes = self.get_wait_time(self.step, "pre-claim")
+        wait_time_minutes = self.get_wait_time(self.step, "pre-claim") + self.random_offset
 
         if not success:
             return 60

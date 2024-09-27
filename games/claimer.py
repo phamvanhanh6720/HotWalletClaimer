@@ -419,7 +419,7 @@ class Claimer:
     def setup_driver(self):
         chrome_options = Options()
         chrome_options.add_argument(f"user-data-dir={self.session_path}")
-        # chrome_options.add_argument("--headless")  # Ensure headless is enabled
+        chrome_options.add_argument("--headless")  # Ensure headless is enabled
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")

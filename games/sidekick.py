@@ -42,7 +42,7 @@ class SideKickClaimer(Claimer):
         self.forceLocalProxy = False
         self.forceRequestUserAgent = False
         self.allow_early_claim = False
-        self.start_app_xpath = "//button[span[contains(text(), 'Play')]]"
+        self.start_app_xpath = "//button[span[contains(text(), 'TAP to Start')]]"
 
     def __init__(self):
         self.settings_file = "variables.txt"
@@ -108,7 +108,7 @@ class SideKickClaimer(Claimer):
 
         # self.get_balance(False)
 
-        wait_time_minutes = self.get_wait_time(self.step, "pre-claim") + self.random_offset
+        wait_time_minutes = self.get_wait_time(self.step, "pre-claim") + self.random_offset + 15
 
         if not success:
             return 60

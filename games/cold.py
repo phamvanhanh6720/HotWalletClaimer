@@ -49,6 +49,9 @@ class ColdClaimer(Claimer):
         super().__init__()
 
 
+    def replace_platform(self):
+        self.output(f"Step {self.step} - We don't replace 'tgWebAppPlatform' on this app.", 3)
+
     def next_steps(self):
         if self.step:
             pass
@@ -200,7 +203,7 @@ class ColdClaimer(Claimer):
 
         # Construct the specific profit XPath
         profit_text = f'{prefix} PROFIT/HOUR:'
-        profit_xpath = "//div[p[text()='Frost Box']]//p[last()]"
+        profit_xpath = "//p[contains(., 'COLD/hour')]"
 
         try:
             element = self.strip_non_numeric(self.monitor_element(profit_xpath))
